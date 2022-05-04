@@ -1,4 +1,5 @@
 #app.py
+from fileinput import filename
 from flask import Flask, flash, request, redirect, url_for, render_template
 import urllib.request
 import os
@@ -181,9 +182,9 @@ def transformTo(content_image_name,tr_style):
     content_targets = extractor(content_image)['content']
     image = tf.Variable(content_image)
     opt = tf.optimizers.Adam(learning_rate=0.02, beta_1=0.99, epsilon=1e-1)
-    for n in range(100):
+    for n in range(1):
         train_step(image,extractor,style_targets,content_targets,opt)
-        # print(".", end='', flush=True)
+        print(".", end='', flush=True)
     
     return image
 
@@ -191,9 +192,27 @@ def transformTo(content_image_name,tr_style):
 def home():
     return render_template('index.html')
  
+@app.route('/artist/Vangogh')
+def vangogh():
+    print(request)
+    filename = request.args['filename']
+    # return render_template('vanghog.html')
+    return render_template('vangogh.html', filename=filename)
+
+# @app.route('/success/<int:result_id>')
+# def success(result_id):
+#     return render_template('vanghog.html', filename=filename)
+#      # replace this with a query from whatever database you're using
+#      result = get_result_from_database(result_id)
+#      # access the result in the tempalte, for example {{ result.name }}
+#      return render_template('success.html', result=result)
+  
 @app.route('/', methods=['POST'])
 def upload_image():
     if 'Styles' not in request.form:
+        flash('No Style Selected')
+        return redirect(request.url)
+    if request.form["Styles"]=="" :
         flash('No Style Selected')
         return redirect(request.url)
     if 'file' not in request.files:
@@ -219,8 +238,9 @@ def upload_image():
         # display.display(tensor_to_image(output_image))
 
         #print('upload_image filename: ' + filename)
-        flash('Image successfully uploaded and displayed below')
-        return render_template('index.html', filename=output_image_name)
+        # flash('Image successfully uploaded and displayed below')
+        # return render_template('index.html', filename=output_image_name)
+        return redirect(url_for('vangogh', filename=output_image_name))
     else:
         flash('Allowed image types are - png, jpg, jpeg, gif')
         return redirect(request.url)
