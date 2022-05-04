@@ -182,7 +182,7 @@ def transformTo(content_image_name,tr_style):
     content_targets = extractor(content_image)['content']
     image = tf.Variable(content_image)
     opt = tf.optimizers.Adam(learning_rate=0.02, beta_1=0.99, epsilon=1e-1)
-    for n in range(1):
+    for n in range(30):
         train_step(image,extractor,style_targets,content_targets,opt)
         print(".", end='', flush=True)
     
