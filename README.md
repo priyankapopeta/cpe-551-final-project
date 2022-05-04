@@ -1,0 +1,2 @@
+# cpe-551-final-project
+A Neural Algorithm of Artistic Style: To acquire a picture made in the style of the style image, we will use a reference style image, such as an artwork by a well-known artist or just some random graffiti or pattern, and an input image that includes the material you wish to style. Using technologies like TensorFlow, this project will be a simple interactive GUI that allows users to experience a unique mix of photographs to construct a neural style transfer.
