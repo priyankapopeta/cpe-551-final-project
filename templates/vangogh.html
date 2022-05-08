@@ -30,27 +30,37 @@
                     <img class="img-fluid" src="../static/uploads/tree.jpg" alt="yourimage" >
             </div>
         </div> -->
-        <p class="font-italic mb-0">Using simple jumbotron-style component, create a nice Bootstrap 4 header with a background image.</p>
-        <p class="font-italic">Snippe by
-            <a href="https://bootstrapious.com" class="text-white">
-                <u>Bootstrapioushelllllllllllllllllllllllllllllllll</u>
-            </a>
-        </p>
 <div class="container" id="content" >
     <div class="row justify-content-md-center">
+        
+        {% if input_name %}
+        <div class="col-6 col-md-4">
+            <img class="img-fluid" src="{{ url_for('display_image', filename=input_name) }}" alt="yourimage" >
+            <label class="mr-sm-2" for="inlineFormCustomSelect">{{input_name}}</label>    
+        </div>
+        {% endif %}
+
+        {% if filename %}
+        <div class="col-6 col-md-4">
+            <img class="img-fluid" src="{{ url_for('display_image', filename=filename) }}" alt="yourimage" >
+            <label class="mr-sm-2" for="inlineFormCustomSelect">{{filename}} </label>    
+        </div>
+        {% endif %}
+</div>
+
+<div class="row justify-content-md-center">
+    <div class="col-6">
+        <p class="Artist_info">
+            Vincent Willem van Gogh (Dutch: [ˈvɪnsənt ˈʋɪləɱ vɑŋ ˈɣɔx] (listen);[note 1] 30 March 1853 – 29 July 1890) was a Dutch Post-Impressionist painter who posthumously became one of the most famous and influential figures in Western art history. In a decade, he created about 2,100 artworks, including around 860 oil paintings, most of which date from the last two years of his life. They include landscapes, still lifes, portraits, and self-portraits, and are characterised by bold colours and dramatic, impulsive and expressive brushwork that contributed to the foundations of modern art. He was not commercially successful, struggled with severe depression and poverty, and committed suicide at the age of 37.
+        </p>
+      </div>
     <div class="col-6 col-md-4">
-        <img class="img-fluid" src="../static/uploads/starrynight.jpg" alt="starrynight">
+        <img class="img-fluid" src="/static/uploads/starrynight.jpg" alt="starrynight">
         <label class="mr-sm-2" for="inlineFormCustomSelect">Van Gogh's StarryNight </label>
       </div>
-    {% if filename %}
-    <div class="col-6 col-md-4">
-            <img class="img-fluid" src="{{ url_for('display_image', filename=filename) }}" alt="yourimage" >
-            <label class="mr-sm-2" for="inlineFormCustomSelect">Your StarryNight &#128540 </label>    
-    </div>
-    {% endif %}
 </div>
 </div>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     function loading(){
         // alert("The Form has been Submitted.");
         $("#loading").show();
@@ -62,6 +72,6 @@
                 //replace the "Choose a file" label
                 $(this).next('.custom-file-label').html(fileName);
             })
-</script>
+</script> -->
 </body>
 </html>
