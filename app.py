@@ -182,10 +182,9 @@ def transformTo(content_image_name,tr_style):
     content_targets = extractor(content_image)['content']
     image = tf.Variable(content_image)
     opt = tf.optimizers.Adam(learning_rate=0.02, beta_1=0.99, epsilon=1e-1)
-    epochs=30
-    for n in range(epochs):
-        train_step(image,extractor,style_targets,content_targets,opt)
-        print(".", end='', flush=True)
+    # for n in range(1):
+    #     train_step(image,extractor,style_targets,content_targets,opt)
+    #     print(".", end='', flush=True)
     
     return image
 
@@ -193,12 +192,10 @@ def transformTo(content_image_name,tr_style):
 def home():
     return render_template('index.html')
  
-@app.route('/artist/Vangogh')
-def vangogh():
-    print(request)
-    filename = request.args['filename']
-    # return render_template('vanghog.html')
-    return render_template('vangogh.html', filename=filename)
+@app.route('/artist/Vangogh/<filename>/<input_name>')
+def vangogh(filename=None,input_name=None):
+    # print(filename +" "+input_name)
+    return render_template('vangogh.html', filename=filename, input_name=input_name)
 
 # @app.route('/success/<int:result_id>')
 # def success(result_id):
@@ -241,7 +238,8 @@ def upload_image():
         #print('upload_image filename: ' + filename)
         # flash('Image successfully uploaded and displayed below')
         # return render_template('index.html', filename=output_image_name)
-        return redirect(url_for('vangogh', filename=output_image_name))
+        # filenameList=[filename,output_image_name]
+        return redirect(url_for('vangogh', filename=output_image_name,input_name=content_image_name))
     else:
         flash('Allowed image types are - png, jpg, jpeg, gif')
         return redirect(request.url)
