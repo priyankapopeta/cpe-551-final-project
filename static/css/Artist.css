@@ -9,8 +9,9 @@ p{
     color: black;
     text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
 }
-.jumbotron {
 
+.jumbotron {
+    background-image: url(../header.jpg);
     /* filter: blur(5px);
     -webkit-filter: blur(5px); */
     background-position: center;
