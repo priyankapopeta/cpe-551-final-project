@@ -151,6 +151,11 @@ def transformTo(content_image_name,tr_style):
         style_image_name = "starrynight.jpg"
     elif tr_style=="WassK":
         style_image_name="WassilyKandinsky.jpg"
+    elif tr_style=="Udine":
+        style_image_name="Udine.jpeg"
+    elif tr_style=="picasso":
+        style_image_name="picasso.jpeg"
+
 
     path_to_content_image = os.path.join(PICS_FOLDER, content_image_name)
     path_to_style_image = os.path.join(PICS_FOLDER, style_image_name)
@@ -182,20 +187,35 @@ def transformTo(content_image_name,tr_style):
     content_targets = extractor(content_image)['content']
     image = tf.Variable(content_image)
     opt = tf.optimizers.Adam(learning_rate=0.02, beta_1=0.99, epsilon=1e-1)
-    # for n in range(1):
-    #     train_step(image,extractor,style_targets,content_targets,opt)
-    #     print(".", end='', flush=True)
+    for n in range(1):
+        train_step(image,extractor,style_targets,content_targets,opt)
+        print(".", end='', flush=True)
     
     return image
 
 @app.route('/')
 def home():
     return render_template('index.html')
- 
+
 @app.route('/artist/Vangogh/<filename>/<input_name>')
 def vangogh(filename=None,input_name=None):
     # print(filename +" "+input_name)
     return render_template('vangogh.html', filename=filename, input_name=input_name)
+
+@app.route('/artist/WassK/<filename>/<input_name>')
+def WassK(filename=None,input_name=None):
+    # print(filename +" "+input_name)
+    return render_template('WassK.html', filename=filename, input_name=input_name)
+
+@app.route('/artist/Udine/<filename>/<input_name>')
+def Udine(filename=None,input_name=None):
+    # print(filename +" "+input_name)
+    return render_template('Udine.html', filename=filename, input_name=input_name)
+
+@app.route('/artist/picasso/<filename>/<input_name>')
+def picasso(filename=None,input_name=None):
+    # print(filename +" "+input_name)
+    return render_template('picasso.html', filename=filename, input_name=input_name)
 
 # @app.route('/success/<int:result_id>')
 # def success(result_id):
@@ -239,7 +259,14 @@ def upload_image():
         # flash('Image successfully uploaded and displayed below')
         # return render_template('index.html', filename=output_image_name)
         # filenameList=[filename,output_image_name]
+    if tr_style=="VanGogh":
         return redirect(url_for('vangogh', filename=output_image_name,input_name=content_image_name))
+    elif tr_style=="WassK":
+        return redirect(url_for('WassK', filename=output_image_name,input_name=content_image_name))
+    elif tr_style=="Udine":
+        return redirect(url_for('Udine', filename=output_image_name,input_name=content_image_name))
+    elif tr_style=="picasso":
+        return redirect(url_for('picasso', filename=output_image_name,input_name=content_image_name))
     else:
         flash('Allowed image types are - png, jpg, jpeg, gif')
         return redirect(request.url)

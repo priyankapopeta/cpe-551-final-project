@@ -12,49 +12,48 @@
 <body>
 
     <header class="text-center text-white py-5">
-        <div class="jumbotron bg-cover text-white" style="background-image: url(https://images.unsplash.com/photo-1545989253-02cc26577f88?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80);">
+        <div class="jumbotron bg-cover text-white">
             <!-- <div class="container py-5 text-center" style="backdrop-filter: blur(5px);"> -->
-                <h1 class=" text-center display-4 font-weight-bold">VanGogh</h1>
+
+                <h1 class=" text-center display-4 font-weight-bold">Tensor Artist</h1>
                 
                 <!-- <a href="#" role="button" class="btn btn-primary px-5">See All Features</a> -->
             <!-- </div> -->
         </div>
         <!-- <h1 class="head-text">Trial</h1> -->
         </header>
-        <!-- <div class="row justify-content-md-center">
-            <div class="col-6 col-md-4">
-                <img class="img-fluid" src="../static/uploads/starrynight.jpg" alt="starrynight">
-            </div>
-            
-            <div class="col-6 col-md-4">
-                    <img class="img-fluid" src="../static/uploads/tree.jpg" alt="yourimage" >
-            </div>
         </div> -->
 <div class="container" id="content" >
     <div class="row justify-content-md-center">
         
         {% if input_name %}
-        <div class="col-6 col-md-4">
+        <div class="col-6 col-md-6">
             <img class="img-fluid" src="{{ url_for('display_image', filename=input_name) }}" alt="yourimage" >
             <label class="mr-sm-2" for="inlineFormCustomSelect">{{input_name}}</label>    
         </div>
         {% endif %}
 
         {% if filename %}
-        <div class="col-6 col-md-4">
+        <div class="col-6 col-md-6">
             <img class="img-fluid" src="{{ url_for('display_image', filename=filename) }}" alt="yourimage" >
             <label class="mr-sm-2" for="inlineFormCustomSelect">{{filename}} </label>    
         </div>
         {% endif %}
 </div>
+<div class="row justify-content-md-center">
+    <div class="col-6 col-md-12">
+        <h1>Van Gogh</h1>
+    </div>
+</div>
+        
 
 <div class="row justify-content-md-center">
-    <div class="col-6">
+    <div class="col-6  col-md-9">
         <p class="Artist_info">
             Vincent Willem van Gogh (Dutch: [ˈvɪnsənt ˈʋɪləɱ vɑŋ ˈɣɔx] (listen);[note 1] 30 March 1853 – 29 July 1890) was a Dutch Post-Impressionist painter who posthumously became one of the most famous and influential figures in Western art history. In a decade, he created about 2,100 artworks, including around 860 oil paintings, most of which date from the last two years of his life. They include landscapes, still lifes, portraits, and self-portraits, and are characterised by bold colours and dramatic, impulsive and expressive brushwork that contributed to the foundations of modern art. He was not commercially successful, struggled with severe depression and poverty, and committed suicide at the age of 37.
         </p>
       </div>
-    <div class="col-6 col-md-4">
+    <div class="col-6 col-md-3">
         <img class="img-fluid" src="/static/uploads/starrynight.jpg" alt="starrynight">
         <label class="mr-sm-2" for="inlineFormCustomSelect">Van Gogh's StarryNight </label>
       </div>
