@@ -11,68 +11,50 @@
 </head>
 <body>
 
-    <header class="text-center text-white py-5">
-        <div class="jumbotron bg-cover text-white">
-            <!-- <div class="container py-5 text-center" style="backdrop-filter: blur(5px);"> -->
+<header class="text-center text-white py-5">
+    <div class="jumbotron bg-cover text-white">
+            <h1 class=" text-center display-4 font-weight-bold">Tensor Artist</h1>
+    </div>
+</header>
 
-                <h1 class=" text-center display-4 font-weight-bold">Tensor Artist</h1>
-               
-                <!-- <a href="#" role="button" class="btn btn-primary px-5">See All Features</a> -->
-            <!-- </div> -->
-        </div>
-        <!-- <h1 class="head-text">Trial</h1> -->
-        </header>
-        <!-- <div class="row justify-content-md-center">
-            <div class="col-6 col-md-4">
-                <img class="img-fluid" src="../static/uploads/starrynight.jpg" alt="starrynight">
-            </div>
-            
-            <div class="col-6 col-md-4">
-                    <img class="img-fluid" src="../static/uploads/tree.jpg" alt="yourimage" >
-            </div>
-        </div> -->
 <div class="container" id="content" >
-    <div class="row justify-content-md-center">
-        
+    <div class="row justify-content-md-center">  
         {% if input_name %}
-        <div class="col-6 col-md-4">
+        <div class="col-6 col-md-6">
             <img class="img-fluid" src="{{ url_for('display_image', filename=input_name) }}" alt="yourimage" >
-            <label class="mr-sm-2" for="inlineFormCustomSelect">{{input_name}}</label>    
+            <label class="mr-sm-2" for="inlineFormCustomSelect">Input Image</label>    
         </div>
         {% endif %}
 
         {% if filename %}
-        <div class="col-6 col-md-4">
+        <div class="col-6 col-md-6">
             <img class="img-fluid" src="{{ url_for('display_image', filename=filename) }}" alt="yourimage" >
-            <label class="mr-sm-2" for="inlineFormCustomSelect">{{filename}} </label>    
+            <label class="mr-sm-2" for="inlineFormCustomSelect">Your Image Francis Picabia Style </label>    
         </div>
         {% endif %}
 </div>
+<div class="row justify-content-md-center">
+    <div class="col-6 col-md-12">
+        <h1>Francis Picabia</h1>
+    </div>
+</div>
 
 <div class="row justify-content-md-center">
-    <div class="col-6">
+    <div class="col-6 col-md-8">
         <p class="Artist_info">
-            Udine
-                </p>
+            Francis Picabia (French: [fʁɑ̃sis pikabja]: born Francis-Marie Martinez de Picabia; 22 January 1879 – 30 November 1953) was a French avant-garde painter, poet and typographist. After experimenting with Impressionism and Pointillism, Picabia became associated with Cubism. His highly abstract planar compositions were colourful and rich in contrasts. He was one of the early major figures of the Dada movement in the United States and in France. He was later briefly associated with Surrealism, but would soon turn his back on the art establishment.[1]
+        </p>
+        <p>
+            Francis Picabia was born in Paris of a French mother and a Cuban father of Spanish descent. Some sources would have his father as of aristocratic Spanish descent, whereas others consider him of non-aristocratic Spanish descent, from the region of Galicia.[2] His birth year of 1879 coincided with the Spanish-Cuban Little War; and though Picabia was born in Paris, his father was involved in Cuban-French relations and would later serve as attaché at the Cuban legation in Paris (see the Treaty of 1898). The family ties to Cuba would be important in Picabia's life later on.
+        </p>
       </div>
     <div class="col-6 col-md-4">
-        <img class="img-fluid" src="/static/uploads/Udine.jpeg" alt="starrynight">
-        <label class="mr-sm-2" for="inlineFormCustomSelect">Van Gogh's StarryNight </label>
+        <img class="img-fluid" src="/static/uploads/Udine.jpeg" alt="udine">
+        <br>
+        <label class="mr-sm-2" for="inlineFormCustomSelect">Udine </label>
       </div>
 </div>
 </div>
-<!-- <script type="text/javascript">
-    function loading(){
-        // alert("The Form has been Submitted.");
-        $("#loading").show();
-        $("#content").hide();       
-    }
-    $('#customFile').on('change',function(){
-                //get the file name
-                var fileName = $(this).val().replace('C:\\fakepath\\', " ");
-                //replace the "Choose a file" label
-                $(this).next('.custom-file-label').html(fileName);
-            })
-</script> -->
+
 </body>
 </html>
