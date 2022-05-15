@@ -5,6 +5,8 @@ import urllib.request
 import os
 from werkzeug.utils import secure_filename
 import tensorflow as tf
+tf.config.experimental_run_functions_eagerly(True) 
+
 import tensorflow_hub as hub
 import IPython.display as display
 
@@ -105,7 +107,6 @@ def style_content_loss(outputs,style_targets,content_targets):
 
 @tf.function()
 def train_step(image,extractor,style_targets,content_targets,opt):
-    
     with tf.GradientTape() as tape:
         outputs = extractor(image)
         loss = style_content_loss(outputs,style_targets,content_targets)
@@ -144,9 +145,12 @@ class StyleContentModel(tf.keras.models.Model):
 
         return {'content': content_dict, 'style': style_dict}
     
-def transformTo(content_image_name,tr_style):
+def transformTo(content_image_name,tr_style,maxtime):
+    start = time.time()
+    print("maxtime",maxtime)
     PICS_FOLDER = os.path.join(os.path.join(sys.path[0]), 'static/uploads')
 
+    # Defining style image based on the artist selected
     if tr_style=="VanGogh":
         style_image_name = "starrynight.jpg"
     elif tr_style=="WassK":
@@ -155,76 +159,62 @@ def transformTo(content_image_name,tr_style):
         style_image_name="Udine.jpeg"
     elif tr_style=="picasso":
         style_image_name="picasso.jpeg"
-
-
     path_to_content_image = os.path.join(PICS_FOLDER, content_image_name)
     path_to_style_image = os.path.join(PICS_FOLDER, style_image_name)
+
     content_image = load_img(path_to_content_image)
     style_image = load_img(path_to_style_image)
+
+
     x = tf.keras.applications.vgg19.preprocess_input(content_image*255)
     x = tf.image.resize(x, (224, 224))
-    vgg = tf.keras.applications.VGG19(include_top=True, weights='imagenet')
-    prediction_probabilities = vgg(x)
-    prediction_probabilities.shape
-    predicted_top_5 = tf.keras.applications.vgg19.decode_predictions(prediction_probabilities.numpy())[0]
-    [(class_name, prob) for (number, class_name, prob) in predicted_top_5]
-    vgg = tf.keras.applications.VGG19(include_top=False, weights='imagenet')
-    content_layers = ['block5_conv2'] 
 
+    # start with initial image
+    image = tf.Variable(content_image)
+
+    content_layers = ['block5_conv2'] 
     style_layers = ['block1_conv1',
                     'block2_conv1',
                     'block3_conv1', 
                     'block4_conv1', 
                     'block5_conv1']
-
-    num_content_layers = len(content_layers)
-    num_style_layers = len(style_layers)
-    style_extractor = vgg_layers(style_layers)
-    style_outputs = style_extractor(style_image*255)
     extractor = StyleContentModel(style_layers, content_layers)
-    results = extractor(tf.constant(content_image))
+
     style_targets = extractor(style_image)['style']
     content_targets = extractor(content_image)['content']
-    image = tf.Variable(content_image)
-    opt = tf.optimizers.Adam(learning_rate=0.02, beta_1=0.99, epsilon=1e-1)
-    epochs=30
-    for n in range(epochs):
-        train_step(image,extractor,style_targets,content_targets,opt)
-        print(".", end='', flush=True)
     
+    opt = tf.optimizers.Adam(learning_rate=0.02, beta_1=0.99, epsilon=1e-1)
+    epochs=200
+    for n in range(epochs):
+        iterationtime = time.time()
+        tdiff=iterationtime-start
+        if (tdiff>maxtime and n>1):
+            break
+        train_step(image,extractor,style_targets,content_targets,opt)
+        print(n,".", end='', flush=True)
+    print(n,".", end='', flush=True)
     return image
 
+# Defining all the routes
 @app.route('/')
 def home():
     return render_template('index.html')
 
 @app.route('/artist/Vangogh/<filename>/<input_name>')
 def vangogh(filename=None,input_name=None):
-    # print(filename +" "+input_name)
     return render_template('vangogh.html', filename=filename, input_name=input_name)
 
 @app.route('/artist/WassK/<filename>/<input_name>')
 def WassK(filename=None,input_name=None):
-    # print(filename +" "+input_name)
     return render_template('WassK.html', filename=filename, input_name=input_name)
 
 @app.route('/artist/Udine/<filename>/<input_name>')
 def Udine(filename=None,input_name=None):
-    # print(filename +" "+input_name)
     return render_template('Udine.html', filename=filename, input_name=input_name)
 
 @app.route('/artist/picasso/<filename>/<input_name>')
 def picasso(filename=None,input_name=None):
-    # print(filename +" "+input_name)
     return render_template('picasso.html', filename=filename, input_name=input_name)
-
-# @app.route('/success/<int:result_id>')
-# def success(result_id):
-#     return render_template('vanghog.html', filename=filename)
-#      # replace this with a query from whatever database you're using
-#      result = get_result_from_database(result_id)
-#      # access the result in the tempalte, for example {{ result.name }}
-#      return render_template('success.html', result=result)
   
 @app.route('/', methods=['POST'])
 def upload_image():
@@ -234,6 +224,12 @@ def upload_image():
     if request.form["Styles"]=="" :
         flash('No Style Selected')
         return redirect(request.url)
+    if 'maxtime' not in request.form:
+        flash('No time Selected')
+        return redirect(request.url)
+    if request.form["maxtime"]=="" :
+        flash('No time Selected')
+        return redirect(request.url)
     if 'file' not in request.files:
         flash('No file part')
         return redirect(request.url)
@@ -242,6 +238,7 @@ def upload_image():
     if file.filename == '':
         flash('No image selected for uploading')
         return redirect(request.url)
+    
     if file and allowed_file(file.filename):
         PICS_FOLDER = os.path.join(os.path.join(sys.path[0]), 'static/uploads')
         filename = secure_filename(file.filename)
@@ -249,8 +246,10 @@ def upload_image():
         content_image_name =filename
         
         tr_style=request.form["Styles"]
+        maxtime=int(request.form["maxtime"])
+
         output_image_name=tr_style+content_image_name+""
-        image=transformTo(filename,tr_style)
+        image=transformTo(filename,tr_style,maxtime)
         tensor_to_image(image).save(os.path.join(app.config['UPLOAD_FOLDER'], output_image_name))
         path_to_output_image = os.path.join(PICS_FOLDER, output_image_name)
         output_image = load_img(path_to_output_image)
