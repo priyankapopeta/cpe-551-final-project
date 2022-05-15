@@ -19,6 +19,17 @@
 
 <div class="container" id="content" >
     <div class="row justify-content-md-center">
+        <div class="col-6 col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="/">Home</a></li>
+                  <li class="breadcrumb-item active" aria-current="page">VanGogh</li>
+                </ol>
+              </nav>
+        </div>
+    </div>
+    <br/>
+    <div class="row justify-content-md-center">
         {% if input_name %}
         <div class="col-6 col-md-6">
             <img class="img-fluid" src="{{ url_for('display_image', filename=input_name) }}" alt="yourimage" >
